@@ -4,17 +4,37 @@
 
 =head1 fasta2selfdot.pl
 
+=head1 TITLE
+
+fasta2selfdot
+
+=head1 DESCRIPTION
+
+Script takes a multi-FASTA fle input and breaks it up into single sequence files, then runs self-by-self dot plots with Gepard <http://http://www.helmholtz-muenchen.de/icb/software/gepard/index.html>
+
+Outputs all single-sequence FASTA files, and a directory, './dot', containing all dot plots.
+
+=head1 PREREQUISITES
+
+Gepard
+Bioperl
+
 =head1 USAGE
 
 fasta2selfdot.pl /path/to/sequence.fasta
 
-
 =head1 AUTHOR
 
-Joseph Karalius
+Joey Karalius
+
 https://github.com/jkaralius
 
+=head1 ISSUES
 
+Report all issues to:
+
+https://github.com/jkaralius/fasta2selfdot/issues
+ 
 =cut
 
 
@@ -23,7 +43,7 @@ use strict;
 use warnings;
 
 use Bio::SeqIO;
-use Getopt::Long;
+#use Getopt::Long;
 
 my $file = shift;
 chomp $file;
