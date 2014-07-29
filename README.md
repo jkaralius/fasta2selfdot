@@ -1,40 +1,39 @@
-= FASTA2SELFDOT =
+#FASTA2SELFDOT#
 
 fasta2selfdot.pl
-==TITLE==
+
+##TITLE##
 
 fasta2selfdot
 
-==DESCRIPTION==
+##DESCRIPTION##
 
 Script takes a multi-FASTA or FASTQ file input and breaks it up into single sequence files, then runs self-by-self dot plots with
 Gepard <http://http://www.helmholtz-muenchen.de/icb/software/gepard/index.html>
 
-       Outputs all single-sequence FASTA files into directory "./seq", and dot plots go into "./dot".
+Outputs all single-sequence FASTA files into directory "./seq", and dot plots go into "./dot".
 
 
-==PREREQUISITES==
+##PREREQUISITES##
 
-*Gepard http://http://www.helmholtz-muenchen.de/icb/software/gepard/index.html
-*Bioperl http://www.biperl.org
-
-
-==USAGE==
-
-    fasta2selfdot.pl -i /path/to/sequence.fasta
+* Gepard (http://http://www.helmholtz-muenchen.de/icb/software/gepard/index.html)
+* Bioperl (http://www.biperl.org)
 
 
-===Options===
+##USAGE##
+
+```fasta2selfdot.pl -i /path/to/sequence.fasta```
+
+
+###Options###
 
     -i : /path/to/input/seqfile
 
-==AUTHOR==
+##AUTHOR##
 
 Joey Karalius https://github.com/jkaralius
 
-==ISSUES==
-
-Report all issues to:
+##ISSUES##
 
 https://github.com/jkaralius/fasta2selfdot/issues
 
