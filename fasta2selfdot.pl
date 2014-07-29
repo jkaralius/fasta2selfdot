@@ -10,9 +10,9 @@ fasta2selfdot
 
 =head1 DESCRIPTION
 
-Script takes a multi-FASTA fle input and breaks it up into single sequence files, then runs self-by-self dot plots with Gepard <http://http://www.helmholtz-muenchen.de/icb/software/gepard/index.html>
+Script takes a multi-FASTA or FASTQ file input and breaks it up into single sequence files, then runs self-by-self dot plots with Gepard <http://http://www.helmholtz-muenchen.de/icb/software/gepard/index.html>
 
-Outputs all single-sequence FASTA files, and a directory, './dot', containing all dot plots.
+Outputs all single-sequence FASTA files into directory "./seq", and dot plots go into "./dot".
 
 =head1 PREREQUISITES
 
@@ -21,7 +21,14 @@ Bioperl
 
 =head1 USAGE
 
-fasta2selfdot.pl /path/to/sequence.fasta
+fasta2selfdot.pl -i /path/to/sequence.fasta
+
+
+
+=head2 Options
+
+ -i : /path/to/input/seqfile
+
 
 =head1 AUTHOR
 
@@ -43,25 +50,56 @@ use strict;
 use warnings;
 
 use Bio::SeqIO;
-#use Getopt::Long;
+use Getopt::Long;
 
-my $file = shift;
-chomp $file;
+### DEFAULT SETTINGS
 
-my $nozoom = 1;
-my $maxbin = 1000000;
+my $file;
+my $nozoom    = 1;
+my $maxbin    = 1000000;
 my $maxwidth  = 1200;
 my $maxheight = 1200;
+my $seqdir    = 'seq';
+my $dotdir    = 'dot';
+
 
 # Enter path to geparcmd.sh
-my $gepardcmd = '/home/UNIXHOME/jkaralius/src/gepard-1.30/gepardcmd.sh';
+my $gepardcmd = 'gepardcmd.sh';
 
 #Enter path to edna.mat
 my $mat = '/home/UNIXHOME/jkaralius/src/gepard-1.30/matrices/edna.mat';
 
+
+
+GetOptions(
+
+	'file|in|i|fasta|fastq=s' => \$file,
+	'nozoom'                   => \$nozoom,
+	'maxbin'                   => \$maxbin,
+	'maxwidth'                 => \$maxwidth,
+	'maxheight' => \$maxheight,
+	'seqdir=s' => \$seqdir,
+	'dotdir=s' => \$dotdir,
+	'geaprdcmd=s' => \$gepardcmd,
+	'mat|matrix=s' => \$mat	
+
+
+) || die $!;
+
+
+
+
+
+
+
+
+
+
+
 my $in = Bio::SeqIO->new(-file => $file);
 
-mkdir 'dot';
+mkdir $dotdir;
+mkdir $seqdir;
 
 while (my $seq = $in->next_seq()){
     
@@ -71,15 +109,16 @@ while (my $seq = $in->next_seq()){
     print STDERR $seqlen, "\n";
 
     my $outfile = "$seqid\.fa";
-    my $out = Bio::SeqIO->new(-file => ">$outfile" ,
+	my $outpath = $seqdir.'/'.$outfile;
+    my $out = Bio::SeqIO->new(-file => ">$outpath" ,
 	                  	      -format => 'FASTA');
         
     print STDERR $seq->id, "\t", $seq->length, "\t", $outfile, "\n";
     $out->write_seq($seq);
 
     
-    my $seq1 = $outfile;
-    my $seq2 = $outfile;
+    my $seq1 = $outpath;
+    my $seq2 = $outpath;
     my $zoom = int($seqlen/10000);
     if ($zoom < 30){
         $zoom = 30;
@@ -88,11 +127,11 @@ while (my $seq = $in->next_seq()){
     my $window = 0;
 
     
-    my $png = "./dot/$outfile\.png";
+    my $pngpath = './'.$dotdir.'/'.$outfile.'.png';
     	
-    #my $cmd = "$gepardcmd -seq1 $seq1 -seq2 $seq2 -matrix $mat -maxwidth $maxwidth -maxheight $maxheight -word $word -window $window -outfile $png";
-	my $cmd = "$gepardcmd -seq1 $seq1 -seq2 $seq2 -matrix $mat -zoom $zoom -word $word -window $window -outfile $png";
-	#my $cmd = "$gepardcmd -seq1 $seq1 -seq2 $seq2 -matrix $mat -word $word -window $window -outfile $png";
+    #my $cmd = "$gepardcmd -seq1 $seq1 -seq2 $seq2 -matrix $mat -maxwidth $maxwidth -maxheight $maxheight -word $word -window $window -outfile $pngpath";
+	my $cmd = "$gepardcmd -seq1 $seq1 -seq2 $seq2 -matrix $mat -zoom $zoom -word $word -window $window -outfile $pngpath";
+	#my $cmd = "$gepardcmd -seq1 $seq1 -seq2 $seq2 -matrix $mat -word $word -window $window -outfile $pngpath";
     print STDERR $cmd, "\n";
     `$cmd`;
     
