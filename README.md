@@ -16,7 +16,7 @@ Outputs all single-sequence FASTA files into directory "./seq", and dot plots go
 
 ##PREREQUISITES##
 
-* Gepard (http://http://www.helmholtz-muenchen.de/icb/software/gepard/index.html)
+* Gepard (http://www.helmholtz-muenchen.de/icb/software/gepard/index.html)
 * Bioperl (http://www.biperl.org)
 
 
